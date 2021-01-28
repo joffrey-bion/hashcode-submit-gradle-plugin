@@ -9,12 +9,12 @@ import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.bundling.Zip
-import org.gradle.process.CommandLineArgumentProvider
 import java.nio.file.Path
 import java.nio.file.Paths
-import javax.inject.Inject
 
 private const val EXTENSION_NAME = "hashcode"
+private const val TASK_GROUP = "hashcode"
+
 private const val ZIP_TASK_NAME = "srcZip"
 private const val RUN_TASK_NAME = "runAllInputs"
 private const val SUBMIT_TASK_NAME = "submit"
@@ -25,57 +25,54 @@ open class HashcodeSubmitPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val ext = project.extensions.create(EXTENSION_NAME, HashcodeExtension::class.java, project)
 
-        val srcZipTask = project.tasks.create(ZIP_TASK_NAME, ZipSourcesTask::class.java, ext)
-        val runTask = project.tasks.create(RUN_TASK_NAME, RunTask::class.java, ext)
-        val submitTask = project.tasks.create(SUBMIT_TASK_NAME, SubmitTask::class.java, ext)
-        submitTask.dependsOn(srcZipTask)
-        submitTask.dependsOn(runTask)
+        val srcZipTask = registerZipTask(project, ext)
+        val runTask = registerRunTask(project, ext)
+
+        project.tasks.register(SUBMIT_TASK_NAME, DefaultTask::class.java, ext).configure {
+            group = TASK_GROUP
+            description = "Prepares the submission by running all necessary tasks."
+
+            dependsOn(srcZipTask)
+            dependsOn(runTask)
+        }
     }
 }
 
 open class HashcodeExtension(private val project: Project) {
     var inputsDir: Path = Paths.get("${project.projectDir}/inputs")
-    var outputsDir: Path = Paths.get("${project.projectDir}/outputs")
-    var srcZipOutputFile: Path = outputsDir.resolve("sources.zip")
+    var srcZipFile: Path = Paths.get("${project.projectDir}/outputs/sources.zip")
 }
 
-open class ZipSourcesTask @Inject constructor(private val ext: HashcodeExtension) : Zip() {
+private fun registerZipTask(project: Project, ext: HashcodeExtension) =
+    project.tasks.register(ZIP_TASK_NAME, Zip::class.java).apply {
+        configure {
+            group = TASK_GROUP
+            description = "Zips all sources to submit them along with output files."
 
-    init {
-        group = "hashcode"
-        description = "Zips all sources to submit them along with output files."
-
-        project.afterEvaluate {
-            archiveFileName.set(ext.srcZipOutputFile.toString())
-            from(project.getMainSourceSet().allSource)
+            project.afterEvaluate {
+                archiveFileName.set(ext.srcZipFile.toString())
+                from(project.getMainSourceSet().allSource)
+            }
         }
     }
-}
 
-open class RunTask @Inject constructor(private val ext: HashcodeExtension) : JavaExec() {
+private fun registerRunTask(project: Project, ext: HashcodeExtension) =
+    project.tasks.register(RUN_TASK_NAME, JavaExec::class.java).apply {
+        configure {
+            group = TASK_GROUP
+            description = "Runs the program on all input problems."
 
-    init {
-        group = "hashcode"
-        description = "Runs the program on all input problems."
+            argumentProviders.add {
+                // we pass all files that are in the inputs folder
+                project.fileTree(ext.inputsDir).files.map { it.path }
+            }
 
-        argumentProviders.add(CommandLineArgumentProvider {
-            // we pass all files that are in the inputs folder
-            project.fileTree(ext.inputsDir).files.map { it.path }
-        })
-
-        project.afterEvaluate {
-            classpath = project.getMainSourceSet().runtimeClasspath
-            main = project.getMainClassName()
+            project.afterEvaluate {
+                classpath = project.getMainSourceSet().runtimeClasspath
+                main = project.getMainClassName()
+            }
         }
     }
-}
-
-open class SubmitTask @Inject constructor(private val ext: HashcodeExtension) : DefaultTask() {
-    init {
-        group = "hashcode"
-        description = "Prepares the submission by running all necessary tasks."
-    }
-}
 
 private fun Project.getMainSourceSet(): SourceSet = javaPlugin.sourceSets.getByName("main")
 

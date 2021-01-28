@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "1.4.20" // aligned with Gradle 6.8.1
+    `kotlin-dsl` // compiler plugin to deal with Gradle's Action<T> and the likes
     id("java-gradle-plugin")
     id("com.gradle.plugin-publish") version "0.12.0"
     id("org.hildan.github.changelog") version "1.3.0"
