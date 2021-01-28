@@ -38,8 +38,15 @@ open class HashcodeSubmitPlugin : Plugin<Project> {
     }
 }
 
-open class HashcodeExtension(private val project: Project) {
+open class HashcodeExtension(val project: Project) {
+    /**
+     * The path to directory containing input files.
+     */
     var inputsDir: Path = Paths.get("${project.projectDir}/inputs")
+
+    /**
+     * The path to the output ZIP file to create when zipping the sources.
+     */
     var srcZipFile: Path = Paths.get("${project.projectDir}/outputs/sources.zip")
 }
 
