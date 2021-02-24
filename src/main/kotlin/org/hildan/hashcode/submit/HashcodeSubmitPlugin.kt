@@ -28,7 +28,7 @@ open class HashcodeSubmitPlugin : Plugin<Project> {
         val srcZipTask = registerZipTask(project, ext)
         val runTask = registerRunTask(project, ext)
 
-        project.tasks.register(SUBMIT_TASK_NAME, DefaultTask::class.java, ext).configure {
+        project.tasks.register(SUBMIT_TASK_NAME, DefaultTask::class.java).configure {
             group = TASK_GROUP
             description = "Prepares the submission by running all necessary tasks."
 
