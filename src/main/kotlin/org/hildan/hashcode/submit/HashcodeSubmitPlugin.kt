@@ -56,10 +56,8 @@ private fun registerZipTask(project: Project, ext: HashcodeExtension) =
             group = TASK_GROUP
             description = "Zips all sources to submit them along with output files."
 
-            project.afterEvaluate {
-                archiveFileName.set(ext.srcZipFile.toString())
-                from(project.getMainSourceSet().allSource)
-            }
+            archiveFileName.set(ext.srcZipFile.toString())
+            from(project.getMainSourceSet().allSource)
         }
     }
 
@@ -68,15 +66,12 @@ private fun registerRunTask(project: Project, ext: HashcodeExtension) =
         configure {
             group = TASK_GROUP
             description = "Runs the program on all input problems."
+            classpath = project.getMainSourceSet().runtimeClasspath
+            main = project.getMainClassName()
 
             argumentProviders.add {
                 // we pass all files that are in the inputs folder
                 project.fileTree(ext.inputsDir).files.map { it.path }
-            }
-
-            project.afterEvaluate {
-                classpath = project.getMainSourceSet().runtimeClasspath
-                main = project.getMainClassName()
             }
         }
     }
