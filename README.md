@@ -1,4 +1,4 @@
-# hashcode-gradle-plugin
+# HashCode Submit Gradle Plugin
 
 [![Gradle plugin version](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/org/hildan/hashcode-submit/org.hildan.hashcode-submit.gradle.plugin/maven-metadata.xml.svg?label=gradle&logo=gradle)](https://plugins.gradle.org/plugin/org.hildan.hashcode-submit)
 [![Github Build](https://img.shields.io/github/workflow/status/joffrey-bion/hashcode-submit-gradle-plugin/CI%20Build?label=build&logo=github)](https://github.com/joffrey-bion/hashcode-submit-gradle-plugin/actions?query=workflow%3A%22CI+Build%22)
@@ -26,7 +26,7 @@ Apply the plugin this way:
 ```kotlin
 plugins {
     application
-    id("org.hildan.hashcode-submit") version "0.1.0"
+    id("org.hildan.hashcode-submit") version "0.2.0"
 }
 
 application {
