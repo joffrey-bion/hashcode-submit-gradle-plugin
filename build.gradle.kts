@@ -9,7 +9,7 @@ plugins {
 group = "org.hildan.hashcode"
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
