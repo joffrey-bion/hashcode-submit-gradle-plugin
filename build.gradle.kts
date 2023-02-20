@@ -3,7 +3,7 @@ plugins {
     `kotlin-dsl` // compiler plugin to deal with Gradle's Action<T> and the likes
     id("java-gradle-plugin")
     id("com.gradle.plugin-publish") version "1.1.0"
-    id("org.hildan.github.changelog") version "1.3.0"
+    id("org.hildan.github.changelog") version "1.13.0"
 }
 
 group = "org.hildan.hashcode"
