@@ -1,7 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.4.20" // aligned with Gradle 6.8.1
     `kotlin-dsl` // compiler plugin to deal with Gradle's Action<T> and the likes
-    id("java-gradle-plugin")
     id("com.gradle.plugin-publish") version "1.1.0"
     id("org.hildan.github.changelog") version "1.13.0"
 }
@@ -10,11 +8,6 @@ group = "org.hildan.hashcode"
 
 repositories {
     mavenCentral()
-}
-
-dependencies {
-    testImplementation(kotlin("test"))
-    testImplementation(kotlin("test-junit5"))
 }
 
 gradlePlugin {
