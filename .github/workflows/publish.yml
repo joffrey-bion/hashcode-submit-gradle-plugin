@@ -17,18 +17,11 @@ jobs:
         with:
           java-version: 8
 
-      - name: Gradle build cache
-        uses: actions/cache@v2.1.1
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-build-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: ${{ runner.os }}-gradle-build-
-
-      - name: Gradle wrapper cache
-        uses: actions/cache@v2.1.1
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle-wrapper.properties') }}
-
       - name: Publish plugin to Gradle Portal
-        run: ./gradlew publishPlugins -Pversion=${{ github.event.release.tag_name }} -Pgradle.publish.key=${{ secrets.GRADLE_API_KEY }} -Pgradle.publish.secret=${{ secrets.GRADLE_API_SECRET }}
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: |
+            publishPlugins
+            -Pversion=${{ github.event.release.tag_name }}
+            -Pgradle.publish.key=${{ secrets.GRADLE_API_KEY }}
+            -Pgradle.publish.secret=${{ secrets.GRADLE_API_SECRET }}
