@@ -1,3 +1,6 @@
+⚠️ The HashCode competition will no longer be organized by Google, so the value of this repository is greatly reduced, and thus the repo is archived. Feel free to reuse the code for some other competitive programming that require the zipped sources, though.
+
+
 # HashCode Submit Gradle Plugin
 
 [![Gradle plugin version](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/org/hildan/hashcode-submit/org.hildan.hashcode-submit.gradle.plugin/maven-metadata.xml.svg?label=gradle&logo=gradle)](https://plugins.gradle.org/plugin/org.hildan.hashcode-submit)
